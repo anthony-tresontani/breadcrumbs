@@ -1,6 +1,9 @@
 import re
 from collections import deque
 
+def isalambda(v):
+  return isinstance(v, type(lambda: None)) and v.__name__ == '<lambda>'
+
 class Breadcrumbs(object):
     def __init__(self, nodes):
         self.nodes= nodes
@@ -14,7 +17,13 @@ class Breadcrumbs(object):
                 token  = tokens.popleft()
                 for level, expr, value in self:
                     regexp = re.compile(expr)
-                    if regexp.match(token):
+                    matches = regexp.match(token)
+                    if matches:
+                        if callable(value):
+                            if not isalambda(value):
+                                value = value(**matches.groupdict())
+                            else:
+                                value = value(matches.group())
                         result.append(value)
                         token = tokens.popleft()
                         self.cursor_level += 1

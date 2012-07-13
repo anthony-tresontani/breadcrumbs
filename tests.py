@@ -32,9 +32,22 @@ class BreadCrumbsTest(TestCase):
         self.assertEquals(bc("/B/B/"), ["B"])
 
     def test_regex(self):
-        cfg = [node('', r'.*', 'star'),]
+        cfg = [
+               node('', r'\d+', 'id'),
+               node('', r'.*', 'star'),
+              ]
         bc = Breadcrumbs(cfg).create()
         self.assertEquals(bc("/path"), ["star"])
+        self.assertEquals(bc("/123"), ["id"])
+
+    def test_callable(self):
+        cfg = [
+               node('', r'(?P<id>\d+)', lambda id_: int(id_) + 1),
+               node('', r'\w+', lambda x: "ID"),
+              ]
+        bc = Breadcrumbs(cfg).create()
+        self.assertEquals(bc("/path"), ["ID"])
+        self.assertEquals(bc("/13"), [14])
 
 
 
