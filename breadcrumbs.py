@@ -1,3 +1,4 @@
+import re
 from collections import deque
 
 class Breadcrumbs(object):
@@ -12,7 +13,8 @@ class Breadcrumbs(object):
                 tokens =  deque(path.strip("/").split("/"))
                 token  = tokens.popleft()
                 for level, expr, value in self:
-                    if expr in token:
+                    regexp = re.compile(expr)
+                    if regexp.match(token):
                         result.append(value)
                         token = tokens.popleft()
                         self.cursor_level += 1

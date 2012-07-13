@@ -22,11 +22,21 @@ class BreadCrumbsTest(TestCase):
 
     def test_embed_pattern(self):
         nodes = [
-               node('', r'A', 'AAA'),
-               node('-->', r'B', 'BBB'),
+               node('', r'A', 'A'),
+               node('-->', r'B', 'BB'),
+               node('', r'B', 'B'),
               ]
         bc = Breadcrumbs(nodes).create()
-        self.assertEquals(bc("/A/B"), ["AAA", "BBB"])
+        self.assertEquals(bc("/A/B"), ["A", "BB"])
+        self.assertEquals(bc("/B/A"), ["B"])
+        self.assertEquals(bc("/B/B/"), ["B"])
+
+    def test_regex(self):
+        cfg = [node('', r'.*', 'star'),]
+        bc = Breadcrumbs(cfg).create()
+        self.assertEquals(bc("/path"), ["star"])
+
+
 
 class TestIter(TestCase):
     def test_flat_iter(self):
