@@ -1,5 +1,5 @@
 from unittest import TestCase
-from breadcrumbs import node, Breadcrumbs
+from breadcrumbs import node, Breadcrumbs, create_node
 
 class BreadCrumbsTest(TestCase):
     def test_empty_breadcrumbs(self):
@@ -48,6 +48,28 @@ class BreadCrumbsTest(TestCase):
         bc = Breadcrumbs(cfg).create()
         self.assertEquals(bc("/path"), ["ID"])
         self.assertEquals(bc("/13"), [14])
+
+    def test_custom_pattern(self):
+        node = create_node("---")
+        nodes = [
+               node('', r'A', 'A'),
+               node('---', r'B', 'BB'),
+               node('', r'B', 'B'),
+              ]
+        bc = Breadcrumbs(nodes).create()
+        self.assertEquals(bc("/A/B"), ["A", "BB"])
+        self.assertEquals(bc("/B/A"), ["B"])
+        self.assertEquals(bc("/B/B/"), ["B"])
+
+
+class TestNode(TestCase):
+    def test_node_raise_exception_if_invalid_level(self):
+        with self.assertRaises(ValueError):
+            node('-->/', r'', 'error')
+
+    def test_node_raise_exception_if_invalid_level2(self):
+        with self.assertRaises(ValueError):
+            node('---', r'', 'error')
 
 
 

@@ -39,7 +39,12 @@ class Breadcrumbs(object):
                continue
            yield node
 
-def node(level, expr, string):
-   level = len(level.split("-->")) -1
-   return level, expr, string
+def create_node(pattern):
+    def node(level, expr, string):
+       if level.replace(pattern, "") != "":
+           raise ValueError("Invalid caracter '%s' in node level definition" % level.replace(pattern, ""))
+       level = len(level.split(pattern)) -1
+       return level, expr, string
+    return node
 
+node = create_node("-->")
