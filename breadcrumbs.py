@@ -6,30 +6,28 @@ class Breadcrumbs(object):
 
     def create(self):
         def bc(path):
+            self.cursor_level = 0
             result = []
             try:
-                nodes = deque(self.nodes[:])
                 tokens =  deque(path.strip("/").split("/"))
-
-                token, node  = tokens.popleft(), nodes.popleft()
-                cursor_level = 0
-                while True:
-                    print node, token, cursor_level
-                    level, expr, string = node   
-                    if cursor_level != level:
-                        break
-
+                token  = tokens.popleft()
+                for level, expr, value in self:
                     if expr in token:
-                        result.append(string)
+                        result.append(value)
                         token = tokens.popleft()
-                        cursor_level += 1 
-                    node = nodes.popleft()
-                    level_before = level
+                        self.cursor_level += 1
             except IndexError:
                 pass
             return result
         return bc
     
+    def __iter__(self):
+       for node in self.nodes:
+           level = node[0]
+           if level != self.cursor_level:
+               continue
+           yield node
+
 def node(level, expr, string):
    level = len(level.split("-->")) -1
    return level, expr, string

@@ -28,4 +28,19 @@ class BreadCrumbsTest(TestCase):
         bc = Breadcrumbs(nodes).create()
         self.assertEquals(bc("/A/B"), ["AAA", "BBB"])
 
+class TestIter(TestCase):
+    def test_flat_iter(self):
+        nodeA = node('', r'A', 'AAA')
+        nodeA1 = node('-->', r'A', 'AAA')
+        nodeB = node('', r'B', 'BBB')
+        cfg = [
+               nodeA,
+               nodeA1,
+               nodeB,
+              ]
+        bc = Breadcrumbs(cfg)
+        bc.cursor_level = 0
+        self.assertEquals([n for n in bc], [nodeA, nodeB])
 
+        bc.cursor_level = 1
+        self.assertEquals([n for n in bc], [nodeA1])
