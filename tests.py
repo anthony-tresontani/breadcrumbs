@@ -61,6 +61,13 @@ class BreadCrumbsTest(TestCase):
         self.assertEquals(bc("/B/A"), ["B"])
         self.assertEquals(bc("/B/B/"), ["B"])
 
+    def test_value_none(self):
+        cfg = [
+               node('', r'A', None),
+              ]
+        bc = Breadcrumbs(cfg).create()
+        self.assertEquals(bc("/A"), [])
+
 
 class TestNode(TestCase):
     def test_node_raise_exception_if_invalid_level(self):

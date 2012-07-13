@@ -29,7 +29,7 @@ class Breadcrumbs(object):
                         self.cursor_level += 1
             except IndexError:
                 pass
-            return result
+            return filter(lambda val: val is not None, result)
         return bc
     
     def __iter__(self):
