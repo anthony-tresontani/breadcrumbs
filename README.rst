@@ -15,7 +15,9 @@ We see a breadcrumbs as a tree transforming an url in html.
         node("", r"my-url", <a>url bit for my-url</a>),
         node("---", r'(?P<name>.*)', lambda name: name)
     ]
+
     bc = Breadcrumbs(nodes).create()
+
     bc(request.path)}
 
 You just have to create a list of node processing the url bit by bit and rendering HTML.
