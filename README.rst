@@ -20,7 +20,7 @@ We see a breadcrumbs as a tree transforming an url in html.
 
 You just have to create a list of node processing the url bit by bit and rendering HTML.
 
-`node(level, regex, html`:
+`node(level, regex, html)`:
     node create a breadcrumbs node.
     Take `level` as argument. Level should be many times the patterns defined in create_node. Ie if the pattern is "-->", "" is level 0, "-->" is level 1, "-->-->" is level2, etc...
     `regex` is the pattern that should be matched. Accept any python regular expression.
