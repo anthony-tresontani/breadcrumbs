@@ -4,7 +4,7 @@ Breadcrumbs
 This library has been created to easily define breadcrumbs.
 We see a breadcrumbs as a tree transforming an url in html.
 
-/my-url/my-page --> <a> url bit for my-url</a> | my-page html
+    /my-url/my-page --> <a> url bit for my-url</a> | my-page html
 
     from breadcrumbs import Breadcrumbs
     from breadcrumbs import create_node
